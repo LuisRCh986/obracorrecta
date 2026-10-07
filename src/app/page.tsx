@@ -1,6 +1,5 @@
-import { ReviewDashboard } from "@/components/review-dashboard";
-import { demoFindings, demoProject } from "@/data/demo-project";
+import { ReviewScreen } from "@/components/review-screen";
 
 export default function HomePage() {
-  return <ReviewDashboard project={demoProject} findings={demoFindings} />;
+  return <ReviewScreen />
 }
