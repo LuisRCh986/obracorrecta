@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { Finding, Project, Severity } from "@/types/review";
 
 type SeverityFilter = "all" | Severity;
@@ -8,6 +8,8 @@ type SeverityFilter = "all" | Severity;
 interface ReviewDashboardProps {
   project: Project;
   findings: Finding[];
+  children?: ReactNode;
+  emptyMessage?: string;
 }
 
 const severityLabels: Record<Severity, string> = {
@@ -100,7 +102,12 @@ function SourcePanel({ finding }: { finding: Finding | null }) {
   );
 }
 
-export function ReviewDashboard({ project, findings }: ReviewDashboardProps) {
+export function ReviewDashboard({
+  project,
+  findings,
+  children,
+  emptyMessage = "No hay hallazgos con esta gravedad",
+}: ReviewDashboardProps) {
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -133,10 +140,9 @@ export function ReviewDashboard({ project, findings }: ReviewDashboardProps) {
 
         <p className="mt-2 text-slate-600">{project.description}</p>
 
-        <p className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-sm text-indigo-900">
-          Demo con resultados precargados. El análisis progresivo se incorporará
-          en el siguiente incremento.
-        </p>
+        <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-sm text-indigo-900">
+          {children}
+        </div>
       </header>
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
@@ -177,7 +183,7 @@ export function ReviewDashboard({ project, findings }: ReviewDashboardProps) {
 
           {visibleFindings.length === 0 ? (
             <p className="rounded-xl border border-dashed border-slate-300 p-6 text-sm text-slate-600">
-              No hay hallazgos con esta gravedad.
+              {emptyMessage}
             </p>
           ) : (
             <ul className="space-y-3">
